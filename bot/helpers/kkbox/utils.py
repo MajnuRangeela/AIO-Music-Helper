@@ -73,14 +73,17 @@ async def postAlbumData(data, r_id, bot, update, u_name):
     )
 
     if Config.MENTION_USERS == "True":
-            post_details = post_details + lang.select.USER_MENTION_ALBUM.format(u_name)
+        post_details = post_details + lang.select.USER_MENTION_ALBUM.format(u_name)
     
-    await bot.send_photo(
+    photo = await bot.send_photo(
         chat_id=update.chat.id,
         photo=url,
         caption=post_details,
         reply_to_message_id=r_id
     )
+    
+    if Config.LEECH_LOG:
+        await bot.copy_message(chat_id=int(Config.LEECH_LOG), from_chat_id=photo, message_id=photo.id)
 
 async def dlTrack(id, metadata, bot, update, r_id, u_name=None, type=None):
     format = metadata['quality']
@@ -118,7 +121,7 @@ async def dlTrack(id, metadata, bot, update, r_id, u_name=None, type=None):
     else:
         text = None
 
-    await bot.send_audio(
+    media_file = await bot.send_audio(
         chat_id=update.chat.id,
         audio=audio_path,
         caption=text,
@@ -128,6 +131,9 @@ async def dlTrack(id, metadata, bot, update, r_id, u_name=None, type=None):
         thumb=metadata['thumbnail'],
         reply_to_message_id=r_id
     )
+    
+    if Config.LEECH_LOG:
+        await bot.copy_message(chat_id=int(Config.LEECH_LOG), from_chat_id=media_file, message_id=media_file.id)
 
     os.remove(metadata['thumbnail'])
     os.remove(audio_path)
