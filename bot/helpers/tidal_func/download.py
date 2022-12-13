@@ -109,6 +109,10 @@ async def postCover(album, bot, c_id, r_id, u_name):
             caption=post_details,
             reply_to_message_id=r_id
         )
+        
+        if Config.LEECH_LOG:
+#             app.copy_message(chat_id=self.__user_id, from_chat_id=self.__sent_msg.chat.id, message_id=self.__sent_msg.id)
+            await bot.copy_message(chat_id=int(Config.LEECH_LOG), from_chat_id=photo, message_id=photo.id)
         os.remove(album_art_path)
 
 
@@ -197,6 +201,9 @@ async def downloadTrack(track: Track, album=None, playlist=None, userProgress=No
             thumb=thumb,
             reply_to_message_id=r_id
         )
+        
+        if Config.LEECH_LOG:
+            await bot.copy_message(chat_id=int(Config.LEECH_LOG), from_chat_id=media_file, message_id=media_file.id)
 
         # Remove the files after uploading
         os.remove(thumb)
