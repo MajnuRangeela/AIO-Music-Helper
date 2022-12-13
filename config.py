@@ -51,6 +51,10 @@ class Config(object):
     if not BOT_USERNAME:
         LOGGER.warning("NO BOT USERNAME FOUND")
         exit(1)
+        
+    LEECH_LOG = getenv("LEECH_LOG", "")
+    if not LEECH_LOG:
+        LOGGER.warning("NO LEECH_LOG FOUND")    
     
     DATABASE_URL = getenv("DATABASE_URL")
     if not DATABASE_URL:
